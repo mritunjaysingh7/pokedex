@@ -1,9 +1,6 @@
-
-
-import './App.css'
-import Pokedex from './Components/Pokedex/Pokedex'
 import CustoumRoutes from './Route/CustoumRoutes'
 import { Link } from'react-router-dom'
+import './App.css'
 function App() {
 
   return (

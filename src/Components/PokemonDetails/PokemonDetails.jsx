@@ -2,29 +2,13 @@ import axios from "axios";
 import { useEffect,useState } from "react";
 import { useParams } from "react-router-dom";
 import usePokemonList from "../Hooks/usePOkemonList";
+import usePokemonDetails from "../Hooks/usePOkemonDetails";
 function PokemonDetails() {
-    let { id } = useParams();
-    const [pokemonData, setPokemonData] = useState({});
-
-    async function downloadData() {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}/`)
-        const result = response.data
-        console.log(result)
-        setPokemonData({
-            name:result.name,
-            image: result.sprites.other.dream_world.front_default,
-            height: result.height,
-            weight: result.weight,
-            types: result.types.map(type => type.type.name)
-        })
-
-    }
-    const [pokemonListState]=usePokemonList('https://pokeapi.co/api/v2/type/fire',true)
-    useEffect(() => {
-        downloadData();
-        console.log('list',pokemonListState)
-    }
-        , [])
+   
+   const {id}=useParams();
+    const [pokemonData]=usePokemonDetails(id)
+    
+       
     return (
         <div>
         <div>name:{pokemonData.name}</div>
@@ -33,12 +17,14 @@ function PokemonDetails() {
         <div>Weight:{pokemonData.weight}</div>
         <div>Types:</div>
         {pokemonData.types && pokemonData.types.map((t)=>{ return <li key={t}>{t}</li>})}
+        {pokemonData.types && pokemonData.similarType &&
         <div>
-        MOre fire type pokemon
+        MOre {pokemonData.types[0]} type pokemon
             <ul>
-                {pokemonListState.pokemonLis&&pokemonListState.pokemonList.map((p)=>{<li key={p.pokemon.url}>{p.pokemon.name}</li>})}
+                {pokemonData.similarType.map((p)=> <li key={p.pokemon.url}>{p.pokemon.name}</li>)}
             </ul>
         </div>
+        }
         </div>
         
     )
